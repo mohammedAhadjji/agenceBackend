@@ -3,11 +3,13 @@
 namespace App\Entity;
 
 use App\Repository\VilleRepository;
+use ApiPlatform\Metadata\ApiResource;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: VilleRepository::class)]
+#[ApiResource]
 class Ville
 {
     #[ORM\Id]
@@ -16,9 +18,11 @@ class Ville
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
+    #[Assert\NotBlank]
+    #[Groups([ 'post:write','get:read', 'get:write'])]
     private ?string $name = null;
-
-    #[ORM\OneToMany(targetEntity: Destination::class, mappedBy: 'Ville')]
+     
+    #[ORM\OneToMany(targetEntity: Destination::class, mappedBy: 'ville')]
     private Collection $destinations;
 
     public function __construct()

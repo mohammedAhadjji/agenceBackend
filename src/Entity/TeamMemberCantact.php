@@ -6,6 +6,7 @@ use App\Repository\TeamMemberCantactRepository;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: TeamMemberCantactRepository::class)]
+#[ApiResource]
 class TeamMemberCantact
 {
     #[ORM\Id]

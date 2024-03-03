@@ -19,13 +19,15 @@ class Pays
 
     #[ORM\Column(length: 255)]
     #[Assert\NotBlank]
+    #[Groups(['post:read','get:read', 'get:write'])]
     #[Assert\length(
         min: 3,
         minmessage: 'le nomber minimum de caracteres est { min }'
     )]
     private ?string $name = null;
 
-    #[ORM\OneToMany(targetEntity: Destination::class, mappedBy: 'Pays')]
+    
+    #[ORM\OneToMany(targetEntity: Destination::class, mappedBy: 'pays')]
     private Collection $destinations;
 
     public function __construct()

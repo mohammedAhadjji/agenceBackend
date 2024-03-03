@@ -6,11 +6,20 @@ use ApiPlatform\Metadata\ApiResource;
 use App\Repository\DestinationRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
+use Symfony\Component\Serializer\Annotation\Ignore;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: DestinationRepository::class)]
 #[ApiResource]
+#[Post(
+    normalizationContext: ['groups' => ['post:read']],
+    denormalizationContext: ['groups' => ['post:write']],
+)]
+#[Get(
+    normalizationContext: ['groups' => ['get:read']],
+    denormalizationContext: ['groups' => ['get:write']],
+)]
 class Destination
 {
     #[ORM\Id]
@@ -19,21 +28,29 @@ class Destination
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
+    #[Groups(['post:read', 'post:write','get:read', 'get:write'])]
     private ?string $title = null;
 
     #[ORM\Column(type: Types::TEXT, nullable: true)]
+    #[Groups(['post:read', 'post:write','get:read', 'get:write'])]
     private ?string $description = null;
 
     #[ORM\ManyToOne(inversedBy: 'destinations')]
-    private ?pays $pays = null;
+    #[Groups([ 'post:write','get:read', 'get:write'])]
+    private ?Pays $pays = null;
 
+    
     #[ORM\ManyToOne(inversedBy: 'destinations')]
-    private ?ville $ville = null;
+    #[Groups([ 'post:write','get:read', 'get:write'])]
+    private ?Ville $ville = null;
 
+    #[Groups([ 'post:write','get:read', 'get:write'])]
+    #[Ignore]
     #[ORM\ManyToMany(targetEntity: Offre::class, mappedBy: 'destination')]
     private Collection $offres;
-
-    #[ORM\OneToMany(targetEntity: imageDestination::class, mappedBy: 'destination')]
+    #[Ignore]
+    #[Groups([ 'post:write','get:read', 'get:write'])]
+    #[ORM\OneToMany(targetEntity: ImageDestination::class, mappedBy: 'destination')]
     private Collection $images;
 
     public function __construct()
@@ -83,12 +100,12 @@ class Destination
         return $this;
     }
 
-    public function getVille(): ?ville
+    public function getVille(): ?Ville
     {
         return $this->ville;
     }
 
-    public function setVille(?ville $ville): static
+    public function setVille(?Ville $ville): static
     {
         $this->ville = $ville;
 
@@ -123,14 +140,14 @@ class Destination
     }
 
     /**
-     * @return Collection<int, imageDestination>
+     * @return Collection<int, ImageDestination>
      */
     public function getImages(): Collection
     {
         return $this->images;
     }
 
-    public function addImage(imageDestination $image): static
+    public function addImage(ImageDestination $image): static
     {
         if (!$this->images->contains($image)) {
             $this->images->add($image);
@@ -140,7 +157,7 @@ class Destination
         return $this;
     }
 
-    public function removeImage(imageDestination $image): static
+    public function removeImage(ImageDestination $image): static
     {
         if ($this->images->removeElement($image)) {
             // set the owning side to null (unless already changed)

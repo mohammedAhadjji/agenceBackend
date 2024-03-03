@@ -6,6 +6,7 @@ use App\Repository\ImagePaysRepository;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: ImagePaysRepository::class)]
+#[ApiResource]
 class ImagePays
 {
     #[ORM\Id]

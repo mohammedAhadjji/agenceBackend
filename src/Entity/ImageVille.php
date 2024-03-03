@@ -6,6 +6,7 @@ use App\Repository\ImageVilleRepository;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: ImageVilleRepository::class)]
+#[ApiResource]
 class ImageVille
 {
     #[ORM\Id]

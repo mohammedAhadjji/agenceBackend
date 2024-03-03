@@ -36,7 +36,7 @@ class Offre
     #[ORM\Column(type: Types::TEXT, nullable: true)]
     private ?string $planification = null;
 
-    #[ORM\OneToMany(targetEntity: imageOffre::class, mappedBy: 'offre')]
+    #[ORM\OneToMany(targetEntity: ImageOffre::class, mappedBy: 'offre')]
     private Collection $image;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
@@ -129,14 +129,14 @@ class Offre
     }
 
     /**
-     * @return Collection<int, imageOffre>
+     * @return Collection<int, ImageOffre>
      */
     public function getImage(): Collection
     {
         return $this->image;
     }
 
-    public function addImage(imageOffre $image): static
+    public function addImage(ImageOffre $image): static
     {
         if (!$this->image->contains($image)) {
             $this->image->add($image);
@@ -146,7 +146,7 @@ class Offre
         return $this;
     }
 
-    public function removeImage(imageOffre $image): static
+    public function removeImage(ImageOffre $image): static
     {
         if ($this->image->removeElement($image)) {
             // set the owning side to null (unless already changed)
@@ -171,14 +171,14 @@ class Offre
     }
 
     /**
-     * @return Collection<int, destination>
+     * @return Collection<int, Destination>
      */
     public function getDestination(): Collection
     {
         return $this->destination;
     }
 
-    public function addDestination(destination $destination): static
+    public function addDestination(Destination $destination): static
     {
         if (!$this->destination->contains($destination)) {
             $this->destination->add($destination);
@@ -187,7 +187,7 @@ class Offre
         return $this;
     }
 
-    public function removeDestination(destination $destination): static
+    public function removeDestination(Destination $destination): static
     {
         $this->destination->removeElement($destination);
 
