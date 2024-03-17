@@ -3,10 +3,17 @@ api_platform:
     version: 1.0.0
     formats:
         jsonld: ['application/ld+json']
+        html: ['text/html']
+        formats:
+        json: ['application/json']
+        multipart: ['multipart/form-data']
     docs_formats:
         jsonld: ['application/ld+json']
         jsonopenapi: ['application/vnd.openapi+json']
         html: ['text/html']
+        multipart: ['multipart/form-data']
+    swagger:
+        versions: [3]
     defaults:
         stateless: true
         cache_headers:
@@ -16,3 +23,4 @@ api_platform:
             rfc_7807_compliant_errors: true
     event_listeners_backward_compatibility_layer: false
     keep_legacy_inflector: false
+        

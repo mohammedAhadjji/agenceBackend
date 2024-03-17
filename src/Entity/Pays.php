@@ -6,10 +6,24 @@ use ApiPlatform\Metadata\ApiResource;
 use App\Repository\PaysRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
+use ApiPlatform\Metadata\GetCollection;
+use ApiPlatform\Metadata\Get;
+use ApiPlatform\Metadata\Post;
+use Symfony\Component\Serializer\Annotation\Groups;
+use Doctrine\DBAL\Types\Types;
+use Symfony\Component\Validator\Constraints\NotBlank; 
+use Symfony\Component\Validator\Constraints\Length;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: PaysRepository::class)]
 #[ApiResource]
+#[Post(
+    normalizationContext: ['groups' => ['read']],
+    denormalizationContext: ['groups' => ['write']],
+)]
+#[GetCollection()]
+#[Get()]
+
 class Pays
 {
     #[ORM\Id]
@@ -18,16 +32,17 @@ class Pays
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
-    #[Assert\NotBlank]
-    #[Groups(['post:read','get:read', 'get:write'])]
-    #[Assert\length(
+    #[NotBlank]
+    #[Groups(['post:read','get:read', 'get:write','write','read'])]
+    #[Length(
         min: 3,
-        minmessage: 'le nomber minimum de caracteres est { min }'
+        minMessage: 'Le nombre minimum de caractères est { limit }'
     )]
     private ?string $name = null;
 
     
     #[ORM\OneToMany(targetEntity: Destination::class, mappedBy: 'pays')]
+    #[Groups(['read'])]
     private Collection $destinations;
 
     public function __construct()
@@ -53,7 +68,7 @@ class Pays
     }
 
     /**
-     * @return Collection<int, Destination>
+     * @return Collection<int, destination>
      */
     public function getDestinations(): Collection
     {

@@ -6,10 +6,20 @@ use App\Repository\VilleRepository;
 use ApiPlatform\Metadata\ApiResource;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
+use ApiPlatform\Metadata\GetCollection;
+use ApiPlatform\Metadata\Get;
+use ApiPlatform\Metadata\Post;
+use Symfony\Component\Serializer\Annotation\Groups;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: VilleRepository::class)]
 #[ApiResource]
+#[Post(
+    normalizationContext: ['groups' => ['read']],
+    denormalizationContext: ['groups' => ['write']],
+)]
+#[GetCollection()]
+#[Get()]
 class Ville
 {
     #[ORM\Id]
@@ -19,7 +29,7 @@ class Ville
 
     #[ORM\Column(length: 255)]
     #[Assert\NotBlank]
-    #[Groups([ 'post:write','get:read', 'get:write'])]
+    #[Groups(['post:read','get:read', 'get:write','write','read'])]
     private ?string $name = null;
      
     #[ORM\OneToMany(targetEntity: Destination::class, mappedBy: 'ville')]

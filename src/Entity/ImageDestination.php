@@ -2,6 +2,7 @@
 
 namespace App\Entity;
 
+use ApiPlatform\Metadata\ApiResource;
 use App\Repository\ImageDestinationRepository;
 use Doctrine\ORM\Mapping as ORM;
 
