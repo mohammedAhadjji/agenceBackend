@@ -35,6 +35,7 @@ class TeamMember
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
+    #[Groups(['read','write'])]
     private ?string $name = null;
 
     #[ApiProperty(types: ['https://schema.org/contentUrl'])]
@@ -54,7 +55,7 @@ class TeamMember
     private ?string $details = null;
 
     #[ORM\Column(length: 255, nullable: true)]
-    #[Groups(['read'])]
+    #[Groups(['read','write'])]
     private ?string $image = null;
 
     #[Vich\UploadableField(mapping: 'TeamMember', fileNameProperty:'image')]
