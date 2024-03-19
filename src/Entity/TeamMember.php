@@ -55,7 +55,7 @@ class TeamMember
     private ?string $details = null;
 
     #[ORM\Column(length: 255, nullable: true)]
-    #[Groups(['read','write'])]
+    #[Groups(['read'])]
     private ?string $image = null;
 
     #[Vich\UploadableField(mapping: 'TeamMember', fileNameProperty:'image')]
@@ -194,4 +194,5 @@ class TeamMember
 
         return $this;
     }
+    
 }

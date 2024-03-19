@@ -3,25 +3,27 @@
 
 namespace App\Serializer;
 
-use App\Entity\TeamMember;
-use Symfony\Component\HttpFoundation\File\UploadedFile;
+use Symfony\Component\HttpFoundation\File\File;
 use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
 
 final class UploadedFileDenormalizer implements DenormalizerInterface
 {
-    public function denormalize($data, string $type, string $format = null, array $context = []): TeamMember
+    public function denormalize($data, string $type, string $format = null, array $context = []): File
     {
         return $data;
     }
 
-    public function supportsDenormalization($data, string $type, ?string $format = null, array $context = []): bool
+    public function supportsDenormalization($data, $type, $format = null, array $context = []): bool
     {
-        return $data instanceof TeamMember;
+        return $data instanceof File;
     }
 
     public function getSupportedTypes(?string $format): array
     {
-        return [TeamMember::class => true];
+        return [
+            'object' => null,
+            '*' => false,
+            File::class => true,
+        ];
     }
-
 }
