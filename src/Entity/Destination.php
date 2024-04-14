@@ -1,5 +1,4 @@
 <?php
-
 namespace App\Entity;
 
 use ApiPlatform\Metadata\ApiResource;
@@ -45,18 +44,16 @@ class Destination
     #[Groups([ 'post:write','get:read', 'get:write'])]
     private ?Pays $pays = null;
 
-    
     #[ORM\ManyToOne(inversedBy: 'destinations')]
     #[Groups([ 'post:write','get:read', 'get:write'])]
     private ?Ville $ville = null;
 
     #[Groups([ 'post:write','get:read', 'get:write'])]
-    #[Ignore]
-    #[ORM\ManyToMany(targetEntity: Offre::class, mappedBy: 'destination')]
+    #[ORM\OneToMany(targetEntity: Offre::class, mappedBy: 'destination', cascade: ["persist", "remove"])]
     private Collection $offres;
-    #[Ignore]
-    #[Groups([ 'post:write','get:read', 'get:write'])]
-    #[ORM\OneToMany(targetEntity: ImageDestination::class, mappedBy: 'destination')]
+
+    #[Groups(['post:read','post:write','get:read', 'get:write'])]
+    #[ORM\OneToMany(targetEntity: ImageDestination::class, mappedBy: 'destination', cascade: ["persist", "remove"])]
     private Collection $images;
 
     public function __construct()
@@ -121,25 +118,28 @@ class Destination
     /**
      * @return Collection<int, Offre>
      */
-    public function getOffres(): Collection
+    public function getOffers(): Collection
     {
         return $this->offres;
     }
 
-    public function addOffre(Offre $offre): static
+    public function addOffer(Offre $offer): static
     {
-        if (!$this->offres->contains($offre)) {
-            $this->offres->add($offre);
-            $offre->addDestination($this);
+        if (!$this->offres->contains($offer)) {
+            $this->offres->add($offer);
+            $offer->setDestination($this);
         }
 
         return $this;
     }
 
-    public function removeOffre(Offre $offre): static
+    public function removeOffer(Offre $offer): static
     {
-        if ($this->offres->removeElement($offre)) {
-            $offre->removeDestination($this);
+        if ($this->offres->removeElement($offer)) {
+            // set the owning side to null (unless already changed)
+            if ($offer->getDestination() === $this) {
+                $offer->setDestination(null);
+            }
         }
 
         return $this;

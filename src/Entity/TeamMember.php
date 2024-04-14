@@ -6,6 +6,7 @@ use ApiPlatform\Metadata\ApiResource;
 use ApiPlatform\Metadata\ApiProperty;
 use ApiPlatform\Metadata\GetCollection;
 use ApiPlatform\Metadata\Post;
+use ApiPlatform\Metadata\Get;
 use App\Controller\ImageUploaderController;
 use App\Repository\TeamMemberRepository;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -23,6 +24,7 @@ use Vich\UploaderBundle\Mapping\Annotation as Vich;
     denormalizationContext: ['groups' => ['write']], 
     types: ['https://schema.org/TeamMember'],
     operations: [
+        new Get(),
         new GetCollection(),
         new Post(inputFormats: ['multipart' => ['multipart/form-data']])
     ]

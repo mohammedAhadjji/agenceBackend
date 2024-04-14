@@ -6,6 +6,31 @@ vich_uploader:
 
     mappings:
         TeamMember:
-            uri_prefix: /attchments/imagesMembers
-            upload_destination: '%kernel.project_dir%/public/attchments/imagesMembers'
+            uri_prefix: /attchments/members
+            upload_destination: '%kernel.project_dir%/public/attchments/members'
             namer: Vich\UploaderBundle\Naming\SmartUniqueNamer
+        Destination:
+            uri_prefix: /attchments/destinations
+            upload_destination: '%kernel.project_dir%/public/attchments/destinations'
+            namer: Vich\UploaderBundle\Naming\SmartUniqueNamer
+        Offer:
+            uri_prefix: /attchments/offers
+            upload_destination: '%kernel.project_dir%/public/attchments/offers'
+            namer: Vich\UploaderBundle\Naming\SmartUniqueNamer
+        Pays:
+            uri_prefix: /attchments/pays
+            upload_destination: '%kernel.project_dir%/public/attchments/pays'
+            namer: Vich\UploaderBundle\Naming\SmartUniqueNamer
+        Ville:
+            uri_prefix: /attchments/villes
+            upload_destination: '%kernel.project_dir%/public/attchments/villes'
+            namer: Vich\UploaderBundle\Naming\SmartUniqueNamer
+        Service:
+            uri_prefix: /attchments/services
+            upload_destination: '%kernel.project_dir%/public/attchments/services'
+            namer: Vich\UploaderBundle\Naming\SmartUniqueNamer
+        Cantact:
+            uri_prefix: /attchments/cantacts
+            upload_destination: '%kernel.project_dir%/public/attchments/cantacts'
+            namer: Vich\UploaderBundle\Naming\SmartUniqueNamer
+

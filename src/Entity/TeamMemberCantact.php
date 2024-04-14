@@ -5,7 +5,10 @@ namespace App\Entity;
 use App\Repository\TeamMemberCantactRepository;
 use ApiPlatform\Metadata\ApiResource;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\HttpFoundation\File\File;
+use Vich\UploaderBundle\Mapping\Annotation as Vich;
 
+#[Vich\Uploadable]
 #[ORM\Entity(repositoryClass: TeamMemberCantactRepository::class)]
 #[ApiResource]
 class TeamMemberCantact
@@ -23,6 +26,9 @@ class TeamMemberCantact
 
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $icon = null;
+
+    #[Vich\UploadableField(mapping: 'Service', fileNameProperty:'icon')]
+    private ?File $file = null;
 
     #[ORM\ManyToOne(inversedBy: 'cantact')]
     private ?TeamMember $teamMember = null;
@@ -76,6 +82,26 @@ class TeamMemberCantact
     public function setTeamMember(?TeamMember $teamMember): static
     {
         $this->teamMember = $teamMember;
+
+        return $this;
+    }
+
+    /**
+     * Get the value of file
+     */ 
+    public function getFile()
+    {
+        return $this->file;
+    }
+
+    /**
+     * Set the value of file
+     *
+     * @return  self
+     */ 
+    public function setFile($file)
+    {
+        $this->file = $file;
 
         return $this;
     }

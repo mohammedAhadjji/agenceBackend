@@ -11,6 +11,7 @@ use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\Post;
 use Symfony\Component\Serializer\Annotation\Groups;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Ignore;
 
 #[ORM\Entity(repositoryClass: VilleRepository::class)]
 #[ApiResource]
@@ -28,16 +29,22 @@ class Ville
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
-    #[Assert\NotBlank]
     #[Groups(['post:read','get:read', 'get:write','write','read'])]
     private ?string $name = null;
      
+    #[Ignore]
+    #[Groups(['get:read', 'get:write','write','read'])]
     #[ORM\OneToMany(targetEntity: Destination::class, mappedBy: 'ville')]
     private Collection $destinations;
+
+    #[Groups(['post:read','get:read', 'get:write','write','read'])]
+    #[ORM\OneToMany(mappedBy: 'ville', targetEntity: ImageVille::class, cascade: ["persist", "remove"])]
+    private Collection $images;
 
     public function __construct()
     {
         $this->destinations = new ArrayCollection();
+        $this->images = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -81,6 +88,38 @@ class Ville
             // set the owning side to null (unless already changed)
             if ($destination->getVille() === $this) {
                 $destination->setVille(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, ImageVille>
+     */
+    public function getImages(): Collection
+    {
+        return $this->images;
+    }
+
+    public function addImage(ImageVille $image): self
+    {
+        if (!$this->images->contains($image)) {
+            $this->images[] =$image;
+            $image->setVille($this);
+        }
+
+        return $this;
+    }
+    
+
+    
+    public function removeImage(ImageVille $image): static
+    {
+        if ($this->images->removeElement($image)) {
+            // set the owning side to null (unless already changed)
+            if ($image->getVille() === $this) {
+                $image->setVille(null);
             }
         }
 

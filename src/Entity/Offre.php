@@ -6,49 +6,68 @@ use ApiPlatform\Metadata\ApiResource;
 use App\Repository\OffreRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
+use ApiPlatform\Metadata\GetCollection;
+use ApiPlatform\Metadata\Get;
+use ApiPlatform\Metadata\Post;
+use Symfony\Component\Serializer\Annotation\Groups;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: OffreRepository::class)]
 #[ApiResource]
+#[Post(
+    normalizationContext: ['groups' => ['read']],
+    denormalizationContext: ['groups' => ['write']],
+)]
+#[GetCollection()]
+#[Get()]
 class Offre
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
+    #[Groups(['write','read'])]
     private ?int $id = null;
 
+    #[Groups(['write','read'])]
     #[ORM\Column(length: 255)]
     private ?string $Titre = null;
 
+    #[Groups(['write','read'])]
     #[ORM\Column(type: Types::TEXT, nullable: true)]
     private ?string $Description = null;
 
+    #[Groups(['write','read'])]
     #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
     private ?\DateTimeInterface $date_debut = null;
 
+    #[Groups(['write','read'])]
     #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
     private ?\DateTimeInterface $date_fin = null;
 
+    #[Groups(['write','read'])]
     #[ORM\Column(nullable: true)]
     private ?int $prix = null;
 
+    #[Groups(['write','read'])]
     #[ORM\Column(type: Types::TEXT, nullable: true)]
     private ?string $planification = null;
 
-    #[ORM\OneToMany(targetEntity: ImageOffre::class, mappedBy: 'offre')]
+    #[Groups(['write','read'])]
+    #[ORM\OneToMany(targetEntity: ImageOffre::class, mappedBy: 'offre', cascade: ["persist", "remove"])]
     private Collection $image;
 
+    #[Groups(['write','read'])]
     #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
     private ?\DateTimeInterface $dateEperation = null;
 
-    #[ORM\ManyToMany(targetEntity: destination::class, inversedBy: 'offres')]
-    private Collection $destination;
+    #[Groups(['write','read'])]
+    #[ORM\ManyToOne(targetEntity: Destination::class, inversedBy: 'offres')]
+    private ?Destination $destination = null;
 
     public function __construct()
     {
         $this->image = new ArrayCollection();
-        $this->destination = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -170,26 +189,14 @@ class Offre
         return $this;
     }
 
-    /**
-     * @return Collection<int, Destination>
-     */
-    public function getDestination(): Collection
+    public function getDestination(): ?Destination
     {
         return $this->destination;
     }
 
-    public function addDestination(Destination $destination): static
+    public function setDestination(?Destination $destination): static
     {
-        if (!$this->destination->contains($destination)) {
-            $this->destination->add($destination);
-        }
-
-        return $this;
-    }
-
-    public function removeDestination(Destination $destination): static
-    {
-        $this->destination->removeElement($destination);
+        $this->destination = $destination;
 
         return $this;
     }
