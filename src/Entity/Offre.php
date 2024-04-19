@@ -19,45 +19,51 @@ use Doctrine\ORM\Mapping as ORM;
     normalizationContext: ['groups' => ['read']],
     denormalizationContext: ['groups' => ['write']],
 )]
-#[GetCollection()]
-#[Get()]
+#[GetCollection(
+    normalizationContext: ['groups' => ['get:read']],
+    denormalizationContext: ['groups' => ['get:write']],
+)]
+#[Get(
+    normalizationContext: ['groups' => ['get:read']],
+    denormalizationContext: ['groups' => ['get:write']],
+)]
 class Offre
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
-    #[Groups(['write','read'])]
+    #[Groups(['write','read','get:read', 'get:write'])]
     private ?int $id = null;
 
-    #[Groups(['write','read'])]
+    #[Groups(['write','read','get:read', 'get:write'])]
     #[ORM\Column(length: 255)]
     private ?string $Titre = null;
 
-    #[Groups(['write','read'])]
+    #[Groups(['write','read','get:read', 'get:write'])]
     #[ORM\Column(type: Types::TEXT, nullable: true)]
     private ?string $Description = null;
 
-    #[Groups(['write','read'])]
+    #[Groups(['write','read','get:read', 'get:write'])]
     #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
     private ?\DateTimeInterface $date_debut = null;
 
-    #[Groups(['write','read'])]
+    #[Groups(['write','read','get:read', 'get:write'])]
     #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
     private ?\DateTimeInterface $date_fin = null;
 
-    #[Groups(['write','read'])]
+    #[Groups(['write','read','get:read', 'get:write'])]
     #[ORM\Column(nullable: true)]
     private ?int $prix = null;
 
-    #[Groups(['write','read'])]
+    #[Groups(['write','read','get:read', 'get:write'])]
     #[ORM\Column(type: Types::TEXT, nullable: true)]
     private ?string $planification = null;
 
-    #[Groups(['write','read'])]
+    #[Groups(['write','read','get:read', 'get:write'])]
     #[ORM\OneToMany(targetEntity: ImageOffre::class, mappedBy: 'offre', cascade: ["persist", "remove"])]
     private Collection $image;
 
-    #[Groups(['write','read'])]
+    #[Groups(['write','read','get:read', 'get:write'])]
     #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
     private ?\DateTimeInterface $dateEperation = null;
 

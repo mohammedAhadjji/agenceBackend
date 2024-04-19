@@ -4,9 +4,9 @@ namespace App\Entity;
 
 use ApiPlatform\Metadata\ApiResource;
 use App\Repository\ImageOffreRepository;
-use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\HttpFoundation\File\File;
 use Symfony\Component\Serializer\Annotation\Groups;
+use Doctrine\ORM\Mapping as ORM;
 use Vich\UploaderBundle\Mapping\Annotation as Vich;
 
 #[Vich\Uploadable]
@@ -19,11 +19,11 @@ class ImageOffre
     #[ORM\Column]
     private ?int $id = null;
 
-    #[Groups(['write','read'])]
+    #[Groups(['write','read','get:read', 'get:write'])]
     #[ORM\Column(length: 255)]
     private ?string $name = null;
     
-    #[Groups(['write','read'])]
+    #[Groups(['write','read','get:read', 'get:write'])]
     #[Vich\UploadableField(mapping: 'Offer', fileNameProperty:'name')]
     private ?File $file = null;
 

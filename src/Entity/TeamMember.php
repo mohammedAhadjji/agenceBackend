@@ -5,6 +5,8 @@ namespace App\Entity;
 use ApiPlatform\Metadata\ApiResource;
 use ApiPlatform\Metadata\ApiProperty;
 use ApiPlatform\Metadata\GetCollection;
+use ApiPlatform\Metadata\Patch;
+use ApiPlatform\Metadata\Put;
 use ApiPlatform\Metadata\Post;
 use ApiPlatform\Metadata\Get;
 use App\Controller\ImageUploaderController;
@@ -26,7 +28,10 @@ use Vich\UploaderBundle\Mapping\Annotation as Vich;
     operations: [
         new Get(),
         new GetCollection(),
-        new Post(inputFormats: ['multipart' => ['multipart/form-data']])
+        new Post(inputFormats: ['multipart' => ['multipart/form-data']]),
+        new Patch(inputFormats: ['multipart' => ['multipart/form-data']]),
+        new Put()
+
     ]
 )]
 class TeamMember
@@ -65,6 +70,7 @@ class TeamMember
     private ?File $file = null;
 
     #[ORM\OneToMany(targetEntity: TeamMemberCantact::class, mappedBy: 'teamMember')]
+    #[Groups(['read','write'])]
     private Collection $cantact;
 
     public function __construct()

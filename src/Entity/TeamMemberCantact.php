@@ -5,6 +5,7 @@ namespace App\Entity;
 use App\Repository\TeamMemberCantactRepository;
 use ApiPlatform\Metadata\ApiResource;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\HttpFoundation\File\File;
 use Vich\UploaderBundle\Mapping\Annotation as Vich;
 
@@ -19,15 +20,19 @@ class TeamMemberCantact
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
+    #[Groups(['read','write'])]
     private ?string $name = null;
 
     #[ORM\Column(length: 255)]
+    #[Groups(['read','write'])]
     private ?string $cantact = null;
 
     #[ORM\Column(length: 255, nullable: true)]
+    #[Groups(['read','write'])]
     private ?string $icon = null;
 
     #[Vich\UploadableField(mapping: 'Service', fileNameProperty:'icon')]
+    #[Groups(['read','write'])]
     private ?File $file = null;
 
     #[ORM\ManyToOne(inversedBy: 'cantact')]

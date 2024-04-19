@@ -5,26 +5,15 @@ use ApiPlatform\Metadata\ApiResource;
 use App\Repository\DestinationRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
-use Symfony\Component\Serializer\Annotation\Ignore;
 use Symfony\Component\Serializer\Annotation\Groups;
-use ApiPlatform\Metadata\Get;
-use ApiPlatform\Metadata\Post;
-use ApiPlatform\Metadata\GetCollection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: DestinationRepository::class)]
-#[ApiResource]
-#[Post(
-    normalizationContext: ['groups' => ['post:read']],
-    denormalizationContext: ['groups' => ['post:write']],
-)]
-#[Get(
+#[ApiResource(
     normalizationContext: ['groups' => ['get:read']],
-    denormalizationContext: ['groups' => ['get:write']],
+    denormalizationContext: ['groups' => ['post:write']]
 )]
-#[GetCollection( normalizationContext: ['groups' => ['get:read']],
-denormalizationContext: ['groups' => ['get:write']],)]
 class Destination
 {
     #[ORM\Id]
@@ -33,32 +22,32 @@ class Destination
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
-    #[Groups(['post:read', 'post:write','get:read', 'get:write','read'])]
+    #[Groups(['get:read', 'post:write'])]
     private ?string $title = null;
 
     #[ORM\Column(type: Types::TEXT, nullable: true)]
-    #[Groups(['post:read', 'post:write','get:read', 'get:write','read'])]
+    #[Groups(['get:read', 'post:write'])]
     private ?string $description = null;
 
     #[ORM\ManyToOne(inversedBy: 'destinations')]
-    #[Groups([ 'post:write','get:read', 'get:write'])]
+    #[Groups(['get:read', 'post:write'])]
     private ?Pays $pays = null;
 
     #[ORM\ManyToOne(inversedBy: 'destinations')]
-    #[Groups([ 'post:write','get:read', 'get:write'])]
+    #[Groups(['get:read', 'post:write'])]
     private ?Ville $ville = null;
 
-    #[Groups([ 'post:write','get:read', 'get:write'])]
+    #[Groups(['get:read', 'post:write'])]
     #[ORM\OneToMany(targetEntity: Offre::class, mappedBy: 'destination', cascade: ["persist", "remove"])]
-    private Collection $offres;
+    private Collection $offers;
 
-    #[Groups(['post:read','post:write','get:read', 'get:write'])]
+    #[Groups(['get:read', 'post:write'])]
     #[ORM\OneToMany(targetEntity: ImageDestination::class, mappedBy: 'destination', cascade: ["persist", "remove"])]
     private Collection $images;
 
     public function __construct()
     {
-        $this->offres = new ArrayCollection();
+        $this->offers = new ArrayCollection();
         $this->images = new ArrayCollection();
     }
 
@@ -72,7 +61,7 @@ class Destination
         return $this->title;
     }
 
-    public function setTitle(string $title): static
+    public function setTitle(string $title): self
     {
         $this->title = $title;
 
@@ -84,19 +73,19 @@ class Destination
         return $this->description;
     }
 
-    public function setDescription(?string $description): static
+    public function setDescription(?string $description): self
     {
         $this->description = $description;
 
         return $this;
     }
 
-    public function getPays(): ?pays
+    public function getPays(): ?Pays
     {
         return $this->pays;
     }
 
-    public function setPays(?pays $pays): static
+    public function setPays(?Pays $pays): self
     {
         $this->pays = $pays;
 
@@ -108,7 +97,7 @@ class Destination
         return $this->ville;
     }
 
-    public function setVille(?Ville $ville): static
+    public function setVille(?Ville $ville): self
     {
         $this->ville = $ville;
 
@@ -120,22 +109,22 @@ class Destination
      */
     public function getOffers(): Collection
     {
-        return $this->offres;
+        return $this->offers;
     }
 
-    public function addOffer(Offre $offer): static
+    public function addOffer(Offre $offer): self
     {
-        if (!$this->offres->contains($offer)) {
-            $this->offres->add($offer);
+        if (!$this->offers->contains($offer)) {
+            $this->offers->add($offer);
             $offer->setDestination($this);
         }
 
         return $this;
     }
 
-    public function removeOffer(Offre $offer): static
+    public function removeOffer(Offre $offer): self
     {
-        if ($this->offres->removeElement($offer)) {
+        if ($this->offers->removeElement($offer)) {
             // set the owning side to null (unless already changed)
             if ($offer->getDestination() === $this) {
                 $offer->setDestination(null);
@@ -153,7 +142,7 @@ class Destination
         return $this->images;
     }
 
-    public function addImage(ImageDestination $image): static
+    public function addImage(ImageDestination $image): self
     {
         if (!$this->images->contains($image)) {
             $this->images->add($image);
@@ -163,7 +152,7 @@ class Destination
         return $this;
     }
 
-    public function removeImage(ImageDestination $image): static
+    public function removeImage(ImageDestination $image): self
     {
         if ($this->images->removeElement($image)) {
             // set the owning side to null (unless already changed)
