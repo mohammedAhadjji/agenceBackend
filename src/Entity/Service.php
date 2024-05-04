@@ -31,6 +31,12 @@ class Service
     #[Vich\UploadableField(mapping: 'Service', fileNameProperty:'image')]
     private ?File $file = null;
 
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $icon = null;
+
+    #[Vich\UploadableField(mapping: 'Service', fileNameProperty:'icon')]
+    private ?File $file2 = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -88,6 +94,38 @@ class Service
     public function setFile($file)
     {
         $this->file = $file;
+
+        return $this;
+    }
+
+    public function getIcon(): ?string
+    {
+        return $this->icon;
+    }
+
+    public function setIcon(?string $icon): static
+    {
+        $this->icon = $icon;
+
+        return $this;
+    }
+
+    /**
+     * Get the value of file2
+     */ 
+    public function getFile2()
+    {
+        return $this->file2;
+    }
+
+    /**
+     * Set the value of file2
+     *
+     * @return  self
+     */ 
+    public function setFile2($file2)
+    {
+        $this->file2 = $file2;
 
         return $this;
     }

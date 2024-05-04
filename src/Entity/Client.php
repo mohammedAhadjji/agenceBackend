@@ -46,6 +46,10 @@ class Client
     #[Groups(['get:read', 'post:write'])]
     private ?string $pays = null;
 
+    #[ORM\Column(length: 255, nullable: true)]
+    #[Groups(['get:read', 'post:write'])]
+    private ?string $clientId = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -119,6 +123,18 @@ class Client
     public function setPays(?string $pays): static
     {
         $this->pays = $pays;
+
+        return $this;
+    }
+
+    public function getClientId(): ?string
+    {
+        return $this->clientId;
+    }
+
+    public function setClientId(?string $clientId): static
+    {
+        $this->clientId = $clientId;
 
         return $this;
     }
