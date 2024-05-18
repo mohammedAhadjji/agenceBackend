@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use ApiPlatform\Metadata\ApiResource;
+use ApiPlatform\Metadata\Delete;
 use App\Repository\OffreRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -27,6 +28,7 @@ use Doctrine\ORM\Mapping as ORM;
     normalizationContext: ['groups' => ['get:read']],
     denormalizationContext: ['groups' => ['get:write']],
 )]
+#[Delete()]
 class Offre
 {
     #[ORM\Id]
@@ -68,7 +70,7 @@ class Offre
     private ?\DateTimeInterface $dateEperation = null;
 
     #[Groups(['write','read'])]
-    #[ORM\ManyToOne(targetEntity: Destination::class, inversedBy: 'offres')]
+    #[ORM\ManyToOne(targetEntity: Destination::class, inversedBy: 'offres', cascade: ["persist", "remove"])]
     private ?Destination $destination = null;
 
     public function __construct()

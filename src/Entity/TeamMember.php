@@ -21,19 +21,18 @@ use Vich\UploaderBundle\Mapping\Annotation as Vich;
 
 #[Vich\Uploadable]
 #[ORM\Entity(repositoryClass: TeamMemberRepository::class)]
-#[ApiResource(
-    normalizationContext: ['groups' => ['read']], 
-    denormalizationContext: ['groups' => ['write']], 
-    types: ['https://schema.org/TeamMember'],
-    operations: [
-        new Get(),
-        new GetCollection(),
-        new Post(inputFormats: ['multipart' => ['multipart/form-data']]),
-        new Patch(inputFormats: ['multipart' => ['multipart/form-data']]),
-        new Put()
-
-    ]
+#[ApiResource]
+#[Post(
+    normalizationContext: ['groups' => ['read']],
+    denormalizationContext: ['groups' => ['write']],
 )]
+#[GetCollection()]
+#[Get()]
+#[Put(
+    normalizationContext: ['groups' => ['read']],
+    denormalizationContext: ['groups' => ['write']],
+)]
+#[Patch()]
 class TeamMember
 {
     #[ORM\Id]
