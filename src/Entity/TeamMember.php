@@ -21,23 +21,16 @@ use Vich\UploaderBundle\Mapping\Annotation as Vich;
 
 #[Vich\Uploadable]
 #[ORM\Entity(repositoryClass: TeamMemberRepository::class)]
-#[ApiResource]
-#[Post(
+#[ApiResource(
     normalizationContext: ['groups' => ['read']],
     denormalizationContext: ['groups' => ['write']],
 )]
-#[GetCollection()]
-#[Get()]
-#[Put(
-    normalizationContext: ['groups' => ['read']],
-    denormalizationContext: ['groups' => ['write']],
-)]
-#[Patch()]
 class TeamMember
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
+    #[Groups(['read'])]
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
@@ -61,7 +54,7 @@ class TeamMember
     private ?string $details = null;
 
     #[ORM\Column(length: 255, nullable: true)]
-    #[Groups(['read'])]
+    #[Groups(['read','write'])]
     private ?string $image = null;
 
     #[Vich\UploadableField(mapping: 'TeamMember', fileNameProperty:'image')]
