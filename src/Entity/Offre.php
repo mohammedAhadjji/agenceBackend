@@ -73,9 +73,16 @@ class Offre
     #[ORM\ManyToOne(targetEntity: Destination::class, inversedBy: 'offres', cascade: ["persist", "remove"])]
     private ?Destination $destination = null;
 
+    /**
+     * @var Collection<int, Order>
+     */
+    #[ORM\OneToMany(mappedBy: 'offer', targetEntity: Order::class)]
+    private Collection $orders;
+
     public function __construct()
     {
         $this->image = new ArrayCollection();
+        $this->orders = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -205,6 +212,36 @@ class Offre
     public function setDestination(?Destination $destination): static
     {
         $this->destination = $destination;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Order>
+     */
+    public function getOrders(): Collection
+    {
+        return $this->orders;
+    }
+
+    public function addOrder(Order $order): static
+    {
+        if (!$this->orders->contains($order)) {
+            $this->orders->add($order);
+            $order->setOffer($this);
+        }
+
+        return $this;
+    }
+
+    public function removeOrder(Order $order): static
+    {
+        if ($this->orders->removeElement($order)) {
+            // set the owning side to null (unless already changed)
+            if ($order->getOffer() === $this) {
+                $order->setOffer(null);
+            }
+        }
 
         return $this;
     }

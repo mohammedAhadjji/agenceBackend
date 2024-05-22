@@ -2,15 +2,13 @@
 
 namespace App\Entity;
 
-use ApiPlatform\Metadata\ApiResource;
-use App\Repository\ImageNewsRepository;
-use Doctrine\ORM\Mapping as ORM;use Symfony\Component\HttpFoundation\File\File;
-use Vich\UploaderBundle\Mapping\Annotation as Vich;
+use App\Repository\ImageTestimonialeRepository;
+use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\HttpFoundation\File\File;use Vich\UploaderBundle\Mapping\Annotation as Vich;
 
 #[Vich\Uploadable]
-#[ORM\Entity(repositoryClass: ImageNewsRepository::class)]
-#[ApiResource]
-class ImageNews
+#[ORM\Entity(repositoryClass: ImageTestimonialeRepository::class)]
+class ImageTestimoniale
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
@@ -20,11 +18,8 @@ class ImageNews
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $name = null;
 
-    #[Vich\UploadableField(mapping: 'News', fileNameProperty:'name')]
+    #[Vich\UploadableField(mapping: 'Testimonial', fileNameProperty:'name')]
     private ?File $file = null;
-
-    #[ORM\ManyToOne(inversedBy: 'images')]
-    private ?NEws $nEws = null;
 
     public function getId(): ?int
     {
@@ -39,18 +34,6 @@ class ImageNews
     public function setName(?string $name): static
     {
         $this->name = $name;
-
-        return $this;
-    }
-
-    public function getNEws(): ?NEws
-    {
-        return $this->nEws;
-    }
-
-    public function setNEws(?NEws $nEws): static
-    {
-        $this->nEws = $nEws;
 
         return $this;
     }

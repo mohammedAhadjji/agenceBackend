@@ -2,10 +2,14 @@
 
 namespace App\Entity;
 
+use ApiPlatform\Metadata\ApiResource;
 use App\Repository\TestimonialeRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\HttpFoundation\File\File;use Vich\UploaderBundle\Mapping\Annotation as Vich;
 
+#[Vich\Uploadable]
 #[ORM\Entity(repositoryClass: TestimonialeRepository::class)]
+#[ApiResource]
 class Testimoniale
 {
     #[ORM\Id]
@@ -21,6 +25,9 @@ class Testimoniale
 
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $image = null;
+
+    #[Vich\UploadableField(mapping: 'Testimonial', fileNameProperty:'name')]
+    private ?File $file = null;
 
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $cantact = null;
@@ -74,6 +81,26 @@ class Testimoniale
     public function setCantact(?string $cantact): static
     {
         $this->cantact = $cantact;
+
+        return $this;
+    }
+
+    /**
+     * Get the value of file
+     */ 
+    public function getFile()
+    {
+        return $this->file;
+    }
+
+    /**
+     * Set the value of file
+     *
+     * @return  self
+     */ 
+    public function setFile($file)
+    {
+        $this->file = $file;
 
         return $this;
     }

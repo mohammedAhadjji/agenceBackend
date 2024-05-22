@@ -2,12 +2,15 @@
 
 namespace App\Entity;
 
+use ApiPlatform\Metadata\ApiResource;
 use App\Repository\OrderRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
+
 #[ORM\Entity(repositoryClass: OrderRepository::class)]
 #[ORM\Table(name: '`order`')]
+#[ApiResource]
 class Order
 {
     #[ORM\Id]
@@ -53,6 +56,12 @@ class Order
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
     private ?\DateTimeInterface $dateOfDeath = null;
+
+    #[ORM\ManyToOne(inversedBy: 'orders')]
+    private ?Offre $offer = null;
+
+    #[ORM\Column(nullable: true)]
+    private ?int $numberSeat = null;
 
     public function getId(): ?int
     {
@@ -211,6 +220,38 @@ class Order
     public function setDateOfDeath(?\DateTimeInterface $dateOfDeath): static
     {
         $this->dateOfDeath = $dateOfDeath;
+
+        return $this;
+    }
+
+    public function getNumberSeat(): ?int
+    {
+        return $this->numberSeat;
+    }
+
+    public function setNumberSeat(?int $numberSeat): static
+    {
+        $this->numberSeat = $numberSeat;
+
+        return $this;
+    }
+
+    /**
+     * Get the value of offer
+     */ 
+    public function getOffer()
+    {
+        return $this->offer;
+    }
+
+    /**
+     * Set the value of offer
+     *
+     * @return  self
+     */ 
+    public function setOffer($offer)
+    {
+        $this->offer = $offer;
 
         return $this;
     }

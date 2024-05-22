@@ -2,10 +2,12 @@
 
 namespace App\Entity;
 
+use ApiPlatform\Metadata\ApiResource;
 use App\Repository\SubscriberRepository;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: SubscriberRepository::class)]
+#[ApiResource]
 class Subscriber
 {
     #[ORM\Id]
